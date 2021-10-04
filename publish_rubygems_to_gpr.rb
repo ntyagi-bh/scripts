@@ -1,11 +1,16 @@
+@quiet_mode = ARGV[0] == '-q'
 begin
   require 'highline/import'
 rescue LoadError
   `gem install highline`
+  puts "installed dependency gem highline. please re-run the script"
+  exit()
 end
 
 require 'highline/import'
 def review
+  return if @quiet_mode
+
   confirm = ask("\nEverything looks good so far, Continue [Y/N] ") { |yn| yn.limit = 1, yn.validate = /[yn]/i }
   exit unless confirm.downcase == 'y'
 end
