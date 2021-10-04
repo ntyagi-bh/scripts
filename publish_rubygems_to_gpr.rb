@@ -1,4 +1,3 @@
-@quiet_mode = ARGV[0] == '-q'
 begin
   require 'highline/import'
 rescue LoadError
@@ -8,10 +7,9 @@ rescue LoadError
 end
 
 require 'highline/import'
-def review
-  return if @quiet_mode
-
-  confirm = ask("\nEverything looks good so far, Continue [Y/N] ") { |yn| yn.limit = 1, yn.validate = /[yn]/i }
+def review(msg=nil)
+  msg ||= "Everything looks good so far?"
+  confirm = ask("\n #{msg} [Y/N] ") { |yn| yn.limit = 1, yn.validate = /[yn]/i }
   exit unless confirm.downcase == 'y'
 end
 
@@ -31,7 +29,7 @@ review()
 
 puts "\n\n#{gemname} gem has #{tags.count} tags: #{tags.join(', ')}"
 tags.each do |tag|
-  puts "\n\n\n BUILD FOR #{tag} ..."
+  puts "\n\n\nBUILDING FOR TAG #{tag} ..."
   puts `git checkout tags/#{tag}`
   puts "Building for tag: #{tag}"
   puts `gem build #{gemname}.gemspec -q`
@@ -39,9 +37,9 @@ end
 
 packages = `ls *.gem`.split(' ')
 puts "\nFollowing packages were built: #{packages.join(', ')}"
-review()
+review("Read to publish?")
 
 packages.each do |pkg|
   puts "\n\n\nPUBLISHING #{pkg} ..."
-  `gem push --key github --host https://rubygems.pkg.github.com/bamboohealth #{pkg}`
+  #{}`gem push --key github --host https://rubygems.pkg.github.com/bamboohealth #{pkg}`
 end
