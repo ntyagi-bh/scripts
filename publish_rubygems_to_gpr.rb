@@ -33,14 +33,15 @@ tags.each do |tag|
   puts "Building for tag: #{tag}"
   puts `gem build #{gemname}.gemspec -q`
 end
+`git co master`
 
 packages = `ls *.gem`.split(' ')
 puts "\nFollowing packages were built: #{packages.join(', ')}"
-puts("\n\n!!! Disclaimer: If tagged code gemspec metadata.allowed_push_host exist and is not pointing to GPR, gem will not publish !!!\n\n")
+puts("\n\n!!! Disclaimer: If tagged code gemspec metadata.allowed_push_host exist and is not pointing to GPR, gem will not publish !!!")
+puts "\nAlso make sure *.gem is not listed in .gitignore\n\n"
 review('Ready to publish?')
 
 packages.each do |pkg|
-  `git co master`
   puts "\n\n\nPUBLISHING #{pkg} ..."
   `gem push --key github --host https://rubygems.pkg.github.com/bamboohealth #{pkg}`
 end
