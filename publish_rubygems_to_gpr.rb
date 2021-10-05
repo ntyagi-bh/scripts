@@ -21,13 +21,12 @@ puts "\npulling latest from #{main_branch}"
 puts `git co #{main_branch}`
 puts `git pull`
 puts `git fetch --all --tags`
-
 puts "\nrepo is pointing to:"
 puts `git remote -v`
 
+puts "\n\n#{gemname} gem has #{tags.count} tags: #{tags.join(', ')}"
 review()
 
-puts "\n\n#{gemname} gem has #{tags.count} tags: #{tags.join(', ')}"
 tags.each do |tag|
   puts "\n\n\nBUILDING FOR TAG #{tag} ..."
   puts `git checkout tags/#{tag}`
@@ -37,9 +36,11 @@ end
 
 packages = `ls *.gem`.split(' ')
 puts "\nFollowing packages were built: #{packages.join(', ')}"
-review("Read to publish?")
+puts("\n\n!!! Disclaimer: If tagged code gemspec metadata.allowed_push_host exist and is not pointing to GPR, gem will not publish !!!\n\n")
+review('Ready to publish?')
 
 packages.each do |pkg|
+  `git co master`
   puts "\n\n\nPUBLISHING #{pkg} ..."
-  #{}`gem push --key github --host https://rubygems.pkg.github.com/bamboohealth #{pkg}`
+  `gem push --key github --host https://rubygems.pkg.github.com/bamboohealth #{pkg}`
 end
