@@ -47,7 +47,7 @@ tags.each do |tag|
   baseline = `grep -n 'Gem::Specification.new' #{gemspec_name}`
   add_to_line = baseline.split(':').first.to_i + 1
   gemspec_var = baseline.split('|')[1]
-  `sed -i '' '6s/$/\\nspec.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
+  `sed -i '' '6s/$/\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
 
   puts "Building for tag: #{tag}"
   `gem build #{gemspec_name} -q`
