@@ -1,5 +1,6 @@
 puts "\nrun this script from local gem repo as:"
-puts "\t ruby publish_rubygems_to_gpr <github reponame, if different than local> <main_branch, if not master>\n\n"
+puts "\n ruby publish_rubygems_to_gpr.rb"
+puts "\t ruby publish_rubygems_to_gpr.rb <github reponame, if different than local> <main_branch, if not master>\n\n"
 begin
   require 'highline/import'
 rescue LoadError
@@ -47,7 +48,7 @@ tags.each do |tag|
   baseline = `grep -n 'Gem::Specification.new' #{gemspec_name}`
   add_to_line = baseline.split(':').first.to_i + 1
   gemspec_var = baseline.split('|')[1]
-  `sed -i '' '6s/$/\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
+  `sed -i '' '6s/$/\\r\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
 
   puts "Building for tag: #{tag}"
   `gem build #{gemspec_name} -q`
