@@ -48,7 +48,12 @@ tags.each do |tag|
   baseline = `grep -n 'Gem::Specification.new' #{gemspec_name}`
   add_to_line = baseline.split(':').first.to_i + 1
   gemspec_var = baseline.split('|')[1]
-  `sed -i '' '6s/$/\\r\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
+  `sed -i '' '#{add_to_line}s/$/\\r\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
+
+  # If your gemspec is not following conventions like not putting all code under lib/<gemname> or not including lib files in gemspec
+  puts "updating gemspec to ensure all lib files are included.."
+  `sed -i '' '#{add_to_line+1}s/$/\\r\\n#{gemspec_var}.files +=Dir[\"lib\\/\\*\\*\\/\\*\\/.rb\"]/' #{gemspec_name}`
+  #s.files        += Dir['lib/**/*.rb']
 
   # If gem name does not match the repo name, GPR push will fail with 404: "The expected resource was not found."
   #
@@ -60,7 +65,7 @@ tags.each do |tag|
   # `sed -i '' '6s/$/\\r\\n#{gemspec_var}.name="#{gemname}"/' #{gemspec_name}`
 
   # to print gemspec used to build the gem, uncomment
-  # puts `cat #{gemspec_name}`
+  puts `cat #{gemspec_name}`
 
   puts "Building for tag: #{tag}"
   `gem build #{gemspec_name} -q`
