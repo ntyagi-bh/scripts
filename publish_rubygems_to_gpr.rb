@@ -49,7 +49,7 @@ tags.each do |tag|
   add_to_line = baseline.split(':').first.to_i + 1
   gemspec_var = baseline.split('|')[1]
   `sed -i '' '6s/$/\\r\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
-
+  puts `cat #{gemspec_name}`
   puts "Building for tag: #{tag}"
   `gem build #{gemspec_name} -q`
   `git co .`
@@ -65,6 +65,9 @@ review('Ready to publish?')
 packages.each do |pkg|
   puts "\n\n\nPUBLISHING #{pkg} ..."
   puts `gem push --key github --host https://rubygems.pkg.github.com/bamboohealth #{pkg}`
+  ## to delete the gems got repo and packages (right hand side) > Packages Settings > Delete
+  ## deleting via console is not allowed
+  ## gem yank --key github --host https://rubygems.pkg.github.com/bamboohealth <gemname> -v <version>
 end
 
 built_gemname = gemspec_name.split('.gemspec').first
