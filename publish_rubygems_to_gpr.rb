@@ -51,8 +51,9 @@ tags.each do |tag|
   `sed -i '' '#{add_to_line}s/$/\\r\\n#{gemspec_var}.metadata["github_repo"]="ssh:\\/\\/github.com\\/bamboohealth\\/#{gemname}"/' #{gemspec_name}`
 
   # If your gemspec is not following conventions like not putting all code under lib/<gemname> or not including lib files in gemspec
-  puts "updating gemspec to ensure all lib files are included.."
-  `sed -i '' '#{add_to_line+1}s/$/\\r\\n#{gemspec_var}.files +=Dir[\"lib\\/\\*\\*\\/\\*\\/.rb\"]/' #{gemspec_name}`
+  # puts "updating gemspec to ensure all lib files are included.."
+  # `sed -i '' '/#{gemspec_var}.files/d' #{gemspec_name}`
+  # `sed -i '' '#{add_to_line+1}s/$/\\r\\n#{gemspec_var}.files=Dir[\"lib\\/\\*\\*\\/\\*\"]/' #{gemspec_name}`
   #s.files        += Dir['lib/**/*.rb']
 
   # If gem name does not match the repo name, GPR push will fail with 404: "The expected resource was not found."
