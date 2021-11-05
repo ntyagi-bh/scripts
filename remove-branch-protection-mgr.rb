@@ -1,3 +1,4 @@
+# ruby remove-branch-protection-mgr.rb <token> <branch> <iteration>
 token = ARGV[0]
 repo = ARGV[1]
 iteration = ARGV[2].to_i
