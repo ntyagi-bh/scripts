@@ -1,4 +1,4 @@
-# ruby ../scripts/data_correction_from_audit_logs.rb /Users/ntyagi/Downloads/HI_audit_log.csv last_name,professional_license_number,controlled_substance_id
+# ruby ../scripts/data_correction_from_audit_logs.rb /path_to.csv last_name,professional_license_number,controlled_substance_id
 require 'csv'
 require 'pry-byebug'
 require 'rails'
