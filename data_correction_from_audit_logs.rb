@@ -20,8 +20,8 @@ filtered_csv = CSV.generate do |csv|
     next if data['operation'].downcase != 'update'
 
     fields.each do |field_name|
-      user_id = data.to_a.first.last.to_i,
-
+      # for some reason data['id'] returns nil
+      user_id = data.to_a.first.last.to_i
       old_val = extract_val_for(field: field_name, frm_raw_log: data['xml_audit'], type: 'old')
       new_val = extract_val_for(field: field_name, frm_raw_log: data['xml_audit'], type: 'new')
 
@@ -29,8 +29,8 @@ filtered_csv = CSV.generate do |csv|
 
       next if old_val == new_val
 
-      puts "#{[ field_name, old_val, new_val]}"
-      csv << [ field_name, old_val, new_val]
+      puts "#{[ user_id, field_name, old_val, new_val]}"
+      csv << [ user_id, field_name, old_val, new_val]
     end
   end
 end
