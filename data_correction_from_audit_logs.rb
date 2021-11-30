@@ -14,7 +14,7 @@ def extract_val_for(field:, frm_raw_log:, type:)
 end
 
 filtered_csv = CSV.generate do |csv|
-  csv << ['user_id', 'field_name', 'original_value']
+  csv << ['User ID', 'Field', 'Original Val', 'Updated Val']
 
   CSV.parse(IO.read(audit_log_path), headers: true).each do |data|
     next if data['operation'].downcase != 'update'
