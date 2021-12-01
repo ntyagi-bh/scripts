@@ -1,6 +1,5 @@
 # ruby ../scripts/data_correction_from_audit_logs.rb /path_to.csv last_name,professional_license_number,controlled_substance_id
 require 'csv'
-require 'pry-byebug'
 require 'rails'
 
 audit_log_path = ARGV[0]
@@ -20,8 +19,7 @@ filtered_csv = CSV.generate do |csv|
     next if data['operation'].downcase != 'update'
 
     fields.each do |field_name|
-      # for some reason data['id'] returns nil
-      user_id = data.to_a.first.last.to_i
+      user_id = data['table_id']
       old_val = extract_val_for(field: field_name, frm_raw_log: data['xml_audit'], type: 'old')
       new_val = extract_val_for(field: field_name, frm_raw_log: data['xml_audit'], type: 'new')
 
